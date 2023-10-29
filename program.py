@@ -27,9 +27,9 @@ def main_menu():
     ''')
     option = int(input("Masukkan Nomor Untuk Memilih Opsi: "))
     if option == 1:
-        inform_1 = open("info_tanaman.txt")
-        inform_2 = inform_1.readlines()[0:40]
-        for a in inform_2:
+        info_1 = open("info_tanaman.txt")
+        info_2 = info_1.readlines()[0:40]
+        for a in info_2:
             print(a)
     # elif option == 2:
     #     add_stock():
