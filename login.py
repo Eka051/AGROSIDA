@@ -19,7 +19,7 @@ def register():
     print("REGISTER".center(60))
     print("-"*60)
     username = input("Masukkan Username: ")
-    password = input("Masukkan Password: ")
+    password = str(input("Masukkan Password: "))
     print("="*60)
     
     # Menambahkan data user ke dalam file csv
@@ -32,6 +32,8 @@ def register():
         writer.writerow({'username': username, 'password': password})
     input("REGISTRASI Berhasil. Klik ENTER Untuk Melanjutkan!")
     start()
+    
+    if 
 
 # Fungsi untuk login 
 def login():

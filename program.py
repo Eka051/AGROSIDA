@@ -34,7 +34,6 @@ def main_menu():
         input("Masukkan Pilihan Yang Benar. Klik ENTER untuk kemabali")
         main_menu()
     
-main_menu()   
 def info_tanaman():
     clear()
     print(f'''
