@@ -16,15 +16,14 @@ def exit():
     
 def info_tanaman():
     clear()
-     # Membaca data dari file CSV, dimulai dari baris ke-2
+    # Membaca data dari file CSV, dimulai dari baris ke-2
     with open("info_tanaman.csv", mode="r") as file:
         reader = csv.reader(file)
-        header = next(reader)
         rows = [row for row in reader]
 
     # Memisahkan nilai-nilai dalam list dan membentuk dataframe baru
     data = []
-    for row in rows:
+    for row in rows[1:]:
         nama = row[0]
         hama_list = [item.strip(" '[]") for item in row[1].split(',')]
         pestisida_list = [item.strip(" '[]") for item in row[2].split(',')]
@@ -33,15 +32,15 @@ def info_tanaman():
         for hama, pestisida, dosis in zip(hama_list, pestisida_list, dosis_list):
             data.append([nama, hama, pestisida, dosis])
 
-    df = pd.DataFrame(data, columns=header)
-    df.index = range(1, len(df) + 1) # Memulai index dari 1
+    df = pd.DataFrame(data, columns=['Nama', 'Hama', 'Pestisida', 'Dosis'])
+    df.index = range(1, len(df) + 1)  # Memulai index dari 1
 
     # Menampilkan dataframe
-    print("="*60)
+    print("=" * 60)
     print("DATA INFO TANAMAN".center(60))
-    print("-"*60)
+    print("-" * 60)
     print(df)
-    print("="*60)
+    print("=" * 60)
     input("Klik ENTER untuk kembali ke menu utama!")
     main_menu()
     

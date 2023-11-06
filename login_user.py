@@ -21,6 +21,13 @@ def register():
     username = input("Masukkan Username: ")
     password = input("Masukkan Password: ")
     print("="*60)
+    
+    # Mengecek keberadaan file CSV, dan membuatnya jika belum ada
+    if not os.path.isfile("data_user.csv"):
+        with open("data_user.csv", mode="w", newline='') as file:
+            header = ['username', 'password']
+            writer = csv.DictWriter(file, fieldnames=header)
+            writer.writeheader()
 
     data_account = []
     # Membaca data user dari file csv
