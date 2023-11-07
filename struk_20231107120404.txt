@@ -1,0 +1,10 @@
+
+    ================== STRUK PEMBELIAN ==================
+    Nama          : Furadan
+    Jumlah        : 10
+    Harga Satuan  : 50000
+    Total Harga   : 500000
+    Tanggal       : 2023-11-07
+    Terima kasih telah membeli produk pestisida kami!
+    =====================================================
+    

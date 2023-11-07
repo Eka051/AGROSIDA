@@ -43,19 +43,11 @@ def info_tanaman():
     print("=" * 60)
     input("Klik ENTER untuk kembali ke menu utama!")
     main_menu()
-    
+
 def beli_pestisida():
     clear()
-    df = pd.read_csv("data_pestisida.csv")
-    df.index = range(1, len(df) + 1)
-    print("="*58)
-    print("PRODUK PESTISIDA".center(58))
-    print("-"*58)
-    print(df)
-    print("="*58)
     
-    # Function untuk transaksi pestisida
-
+    
 def main_menu():
     clear()
     print(f'''

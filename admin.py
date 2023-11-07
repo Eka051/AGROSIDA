@@ -105,8 +105,8 @@ def entri_info():
             dosis_list.extend(row['Dosis'].split(', '))
 
     # Now, hama_list, pestisida_list, and dosis_list contain all the entries from the CSV file
-
-    input("Data berhasil ditambahkan ke dalam file CSV. Klik ENTER untuk kembali")
+    print("-"*60)
+    input("Data berhasil ditambahkan. Klik ENTER untuk kembali")
     tanaman()
 
 def tampilkan_info():
@@ -225,7 +225,7 @@ def update_stok():
             found = True
 
             jumlah = int(input("Masukkan jumlah stok pestisida baru: "))
-            ukuran = int(input("Masukkan ukuran baru: "))
+            ukuran = str(input("Masukkan ukuran baru: "))
             harga = int(input("Masukkan harga (Rp) baru: "))
             
             data['Jumlah'] = str(jumlah)
@@ -356,4 +356,6 @@ def pestisida():
     else:
         print("Pilihan INVALID. Masukkan pilihan yang sesuai!")
         input("Klik ENTER untuk kembali!")
+        main_menu()
+        
 main_menu()
