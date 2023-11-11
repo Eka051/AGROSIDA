@@ -28,7 +28,7 @@ def login():
         for row in reader:
             data_account.append(row)
 
-    data_login = [] # menyimpan data akun yang sesuai dengan username dan password yang dimasukkan oleh user
+    data_login = [] # menyimpan data akun yang sesuai dengan username dan password yang dimasukkan oleh admin
     for data in data_account:
         if username == data['username'] and password == data['password']:
             data_login.append(data)

@@ -1,15 +1,6 @@
-Nama,Jumlah Pembelian,Total Harga
-Furadan,4,180000
-Insektisida,5,250000
-Insektisida,5,250000
-Furadan,7,315000,2023-11-06
-Insektisida,8,400000,2023-11-06
-Furadan,5,225000,2023-11-06
-Furadan,4,200000,2023-11-07
-Fungisida 3G,100,6000000,2023-11-07
-Furadan,3,150000,2023-11-07
-Furadan,3,150000,2023-11-07
-Furadan,5,250000,2023-11-07
-Insektisida,10,500000,2023-11-07
-Furadan,10,500000,2023-11-07
-Insektisida,6,300000,2023-11-07
+Nama Produk,Jumlah Pembelian,Total Harga,Tanggal Transaksi
+Furadan,2,100000,08-11-2023
+Insektisida,5,250000,08-11-2023
+Insektisida Dursban 480 EC,25,3125000,10-11-2023
+Insektisida Furadan 3GR,10,500000,11-11-2023
+Insektisida Furadan 3GR,5,250000,11-11-2023
