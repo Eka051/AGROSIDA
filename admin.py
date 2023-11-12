@@ -36,7 +36,6 @@ def main_menu():
         pestisida()
     elif option == "3":
         clear()
-        # rekap_total = rekap_penjualan()
         print("="*60)
         print("DATA REKAP PENJUALAN".center(60))
         print("-"*60)
@@ -49,9 +48,16 @@ def main_menu():
         main_menu()
         
 def rekap_penjualan():
+    if not os.path.exists("transaksi.csv"):
+        print("="*60)
+        print("\nData rekap penjualan tidak ada. Klik ENTER untuk kembali!\n")
+        print("="*60)
+        input()
+        main_menu()
+        
     data = pd.read_csv("transaksi.csv")
     data['Tanggal'] = data['Tanggal Transaksi']
-
+    
     # Merekap penjualan perhari
     rekap_per_hari = data.groupby(['Tanggal']).agg({ #agregasi data frame untuk menghitung jumlah penjualan
         'Jumlah Pembelian': 'sum',
@@ -159,37 +165,59 @@ def update_info():
         reader = csv.DictReader(file)
         list_tanaman = [row for row in reader]
 
-    update = input("Masukkan nama tanaman untuk diupdate: ")
-    found = False
-    for data in list_tanaman:
-        if data['Nama'] == update:
-            hama = input("Masukkan hama tanaman baru: ")
-            pestisida = input("Masukkan pestisida baru: ")
-            dosis = input("Masukkan dosis baru: ")
+    while True:
+        nama = input("Masukkan nama tanaman untuk diupdate: ")
+        found = False
+        for data in list_tanaman:
+            if data['Nama'] == nama:
+                found = True
+                break
 
-            data['Hama'] = hama
-            data['Pestisida'] = pestisida
-            data['Dosis'] = dosis
-            found = True
-            break
+        if not found:
+            print(f"Tanaman dengan nama {nama} tidak ditemukan.")
+            cancel = input("Ketik \'b\' untuk kembali ke dashboard! : ")
+            if cancel.lower() == "b":
+                tanaman()
+            tanaman()
+        # Menambahkan data hama, pestisida, dan dosis baru
+        list_hama = []
+        list_pestisida = []
+        list_dosis = []
+        while True:
+            hama = input(f"Masukkan hama {nama} : ")
 
-    if not found:
-        print(f"Tanaman dengan nama {update} tidak ditemukan.")
+            pestisida = input(f"Masukkan pestisida untuk {hama} : ")
+            dosis = input(f"Masukkan dosis untuk {pestisida} : ")
 
-    with open("info_tanaman.csv", mode="w", newline="") as info_tanaman:
-        header = ['Nama', 'Hama', 'Pestisida', 'Dosis']
-        writer = csv.DictWriter(info_tanaman, fieldnames=header)
-        writer.writeheader()
-        writer.writerows(list_tanaman)
+            # Menambahkan hasil inputan ke dalam list
+            list_hama.append(hama)
+            list_pestisida.append(pestisida)
+            list_dosis.append(dosis)
 
-    print("-" * 60)
-    if found:
-        print(f"Info tanaman {update} berhasil diupdate")
-    else:
-        print("Tidak ada perubahan karena tanaman tidak ditemukan.")
+            print("-" * 60)
+            option = input("Tambah hama, pestisida, dan dosis lagi? [y/n] : ")
 
-    input("Klik ENTER untuk kembali!")
-    tanaman()
+            if option.lower() != "y":
+                break
+
+        # Mengganti data tanaman di file CSV
+        data['Hama'] = list_hama
+        data['Pestisida'] = list_pestisida
+        data['Dosis'] = list_dosis
+
+        with open("info_tanaman.csv", mode="w", newline="") as info_tanaman:
+            header = ['Nama', 'Hama', 'Pestisida', 'Dosis']
+            writer = csv.DictWriter(info_tanaman, fieldnames=header)
+            writer.writeheader()
+            writer.writerows(list_tanaman)
+
+        tampilkan_info()
+        print("-" * 60)
+        print(f"Info tanaman {nama} berhasil diupdate")
+
+        input("Klik ENTER untuk kembali!")
+        tanaman()
+
 
 def hapus_info():
     clear()
@@ -223,7 +251,8 @@ def hapus_info():
 
     print("-" * 60)
     if tanaman_terhapus:
-        print(f"Info tanaman {tanaman_terhapus['Nama']} berhasil dihapus")
+        input(f"Info tanaman {tanaman_terhapus['Nama']} berhasil dihapus")
+        tampilkan_info()
     else:
         print(f"Tanaman dengan nama {nama_tanaman_hapus} tidak ditemukan.")
 
@@ -231,36 +260,12 @@ def hapus_info():
     tanaman()
  
 # -----------------------------------------Fungsi untuk PAGE "PESTISIDA"----------------------------------------------------------------
-
-# Fungsi untuk stock opname =>  penghitungan fisik dan pencocokan dengan stok yang tercatat di sistem
-def stock_opname():
-    clear()
-    # Membaca data pestisida dari file csv
-    list_pestisida = []
-    with open("data_pestisida.csv", mode="r") as data_pestisida:
-        reader = csv.DictReader(data_pestisida)
-        for row in reader:
-            list_pestisida.append(row)
-            
-    print("="*60)
-    print("STOCK OPNAME".center(60))
-    print("-"*60)
-    
-    for data in list_pestisida:
-        nama = data['Nama']
-        stok_fisik = int(input(f"Masukkan jumlah stok fisik {nama}: "))
-        selisih = stok_fisik - int(data['Jumlah'])
-        data['Jumlah'] = str(stok_fisik)
-        
-        if selisih != 0:
-            print(f"Perbedaan jumlah stok untuk {nama}: {selisih}")
-    
 def entri_stok():
     clear()
     # Cek jika file belum ada akan dibuat secara otomatis
     if not os.path.exists("data_pestisida.csv"):
         with open("data_pestisida.csv", mode="a", newline="") as data_pestisida:
-            header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)']
+            header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)', 'Terjual']
             writer= csv.DictWriter(data_pestisida, fieldnames=header)
             writer.writeheader()
                     
@@ -272,7 +277,7 @@ def entri_stok():
 
     # Membuka file CSV untuk menambahkan data
     with open("data_pestisida.csv", mode="a", newline="") as data_pestisida:
-        header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)']
+        header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)', 'Terjual']
         writer = csv.DictWriter(data_pestisida, fieldnames=header)
         
         print("="*60)
@@ -281,9 +286,7 @@ def entri_stok():
         
         counter = True
         while counter:
-        
             nama = input("Masukkan nama pestisida: ")
-
             # Memeriksa apakah pestisida sudah ada di dalam list
             for data in list_pestisida:
                 if nama == data['Nama']:
@@ -297,8 +300,7 @@ def entri_stok():
             print("="*60)
             
             # Menulis data baru ke file CSV
-            writer.writerow({'Nama': nama, 'Jumlah': jumlah, 'Ukuran': ukuran, 'Harga (Rp)': Harga})
-            print("-"*60)
+            writer.writerow({'Nama': nama, 'Jumlah': jumlah, 'Ukuran': ukuran, 'Harga (Rp)': Harga, 'Terjual': 0})
             print("Data berhasil disimpan!")
             print("-" * 60)
             option = input("Tambah stok pestisida lagi? [y/n] : ")
@@ -309,34 +311,25 @@ def entri_stok():
                 counter = False
                 print("-"*60)
                 print("Data berhasil disimpan!")
-                stock_opname()
-                input("Klik ENTER untuk kembali!")
     
+    tampilkan_stok()
+    input("Klik ENTER untuk kembali!")
     pestisida()
     
 def tampilkan_stok():
     clear()
     df = pd.read_csv("data_pestisida.csv")
+    df['Terjual'] = df['Terjual'].astype('int')
     df.index = range(1, len(df) + 1)
-    print("="*58)
-    print("DATA STOK PESTISIDA".center(58))
-    print("-"*58)
+    print("="*68)
+    print("DATA STOK PESTISIDA".center(68))
+    print("-"*68)
     print(df)
-    print("="*58)
-    input("Klik ENTER untuk kembali ke dashboard!")
-    pestisida()
+    print("="*68)
     
 def update_stok():
     clear()
-    
-    df = pd.read_csv("data_pestisida.csv")
-    df.index = range(1, len(df) + 1)
-    print("="*58)
-    print("DATA STOK PESTISIDA".center(58))
-    print("-"*58)
-    print(df)
-    print("="*58)
-    
+    tampilkan_stok()
     list_pestisida = []
     with open("data_pestisida.csv", mode="r") as file: #buat buka file csv nya
         reader = csv.DictReader(file)
@@ -348,6 +341,7 @@ def update_stok():
         no_produk = int(no_produk)
         if 1 <= no_produk <= len(list_pestisida):
             data = list_pestisida[no_produk - 1]
+            
             jumlah = int(input("Masukkan jumlah stok pestisida baru: "))
             ukuran = str(input("Masukkan ukuran baru: "))
             Harga = int(input("Masukkan Harga baru (Rp): "))
@@ -357,10 +351,11 @@ def update_stok():
             data['Harga (Rp)'] = str(Harga)
             
             with open("data_pestisida.csv", mode="w", newline="") as data_pestisida:
-                header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)']
+                header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)', 'Terjual']
                 writer = csv.DictWriter(data_pestisida, fieldnames=header)
                 writer.writeheader()
                 writer.writerows(list_pestisida)
+            tampilkan_stok()
             print("-"*60)
             print("Data pestisida berhasil diupdate!")
         else:
@@ -375,39 +370,44 @@ def update_stok():
 
 def hapus_stok():
     clear()
-    df = pd.read_csv("data_pestisida.csv")
-    df.index = range(1, len(df) + 1)
-    print("="*58)
-    print("DATA STOK PESTISIDA".center(58))
-    print("-"*58)
-    print(df)
-    print("="*58)
+    tampilkan_stok()
     # Baca data pestisida dari file CSV
     list_stok = []
     with open("data_pestisida.csv", mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:
             list_stok.append(row)
-    
-    no_produk = input("Pilih nomor pestisida untuk yang ingin dihapus: ")     
-    if no_produk.isdigit():
-        no_produk = int(no_produk)
-        if 1 <= no_produk <= len(list_stok):
-            list_stok.pop(no_produk - 1)
-            with open("data_pestisida.csv", mode="w", newline="") as data_pestisida:
-                header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)']
-                writer = csv.DictWriter(data_pestisida, fieldnames=header)
-                writer.writeheader()
-                writer.writerows(list_stok)  # Tulis kembali data tanpa pestisida yang dihapus
-            print("-"*60)
-            print("Data pestisida berhasil dihapus!")
-        else:
-            input("Pilih data yang tersedia!. Klik ENTER untuk kembali!")
-            hapus_stok()
-    else:
-        input("Pilihan berupa angka!")
-        hapus_stok()
+            
+    counter = True
+    while counter:
+        no_produk = input("Pilih nomor pestisida untuk yang ingin dihapus: ")     
+        if no_produk.isdigit():
+            no_produk = int(no_produk)
+            if 1 <= no_produk <= len(list_stok):
+                list_stok.pop(no_produk - 1)
+                with open("data_pestisida.csv", mode="w", newline="") as data_pestisida:
+                    header = ['Nama', 'Jumlah', 'Ukuran', 'Harga (Rp)', 'Terjual']
+                    writer = csv.DictWriter(data_pestisida, fieldnames=header)
+                    writer.writeheader()
+                    writer.writerows(list_stok)  # Tulis kembali data tanpa pestisida yang dihapus
+                tampilkan_stok()
+                print("-"*60)
+                print("Data pestisida berhasil dihapus!\n")
+                
+                option = input("Hapus stok pestisida lagi? [y/n] : ")
 
+                if option.lower() == "y":
+                    counter = True
+                else:
+                    counter = False
+                    print("-"*60)
+            else:
+                input("Pilih data yang tersedia!. Klik ENTER untuk kembali!")
+                hapus_stok()
+        else:
+            input("Pilihan berupa angka!")
+            hapus_stok()
+            
     input("\nKlik ENTER untuk kembali ke menu Pestisida!")
     pestisida()
 
@@ -472,6 +472,8 @@ def pestisida():
         entri_stok()
     elif option == "2":
         tampilkan_stok()
+        input("Klik ENTER untuk kembali ke dashboard!")
+        pestisida()
     elif option == "3":
         update_stok()
     elif option == "4":

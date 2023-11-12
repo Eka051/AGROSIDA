@@ -46,14 +46,15 @@ def info_tanaman():
 
 def beli_pestisida():
     clear()
+    clear()
     df = pd.read_csv("data_pestisida.csv")
+    df['Terjual'] = df['Terjual'].astype('int')
     df.index = range(1, len(df) + 1)
-    
-    print("="*58)
-    print("PRODUK PESTISIDA".center(58))
-    print("-"*58)
+    print("="*68)
+    print("PRODUK PESTISIDA".center(68))
+    print("-"*68)
     print(df)
-    print("="*58)
+    print("="*68)
     
     option = input("Pilih nomor untuk membeli produk: ")
 
@@ -65,6 +66,10 @@ def beli_pestisida():
         if jumlah_pembelian <= selected_product['Jumlah']:
             # Update Jumlah pestisida di file csv
             df.at[selected_index, 'Jumlah'] -= jumlah_pembelian
+            df.to_csv("data_pestisida.csv", index=False)
+            
+            # Menambah data pestisida yang terjual ke dalam csv
+            df.at[selected_index, 'Terjual'] += jumlah_pembelian
             df.to_csv("data_pestisida.csv", index=False)
 
             # Menyimpan data transaksi ke file csv

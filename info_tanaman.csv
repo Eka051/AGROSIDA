@@ -1,5 +1,5 @@
 Nama,Hama,Pestisida,Dosis
 Padi,"['Wereng', 'Keong mas']","['Insektisida', 'Herbisida']","['2-3 ml/l air', '10-15 gram/m2']"
-Jagung,"['Ulat grayak', 'Walang sangit']","['Insektisida', 'Dursban 480 EC']","['2-3 ml/l air', '2-3 ml/l air']"
+Jagung,"['Belalang daun', 'Walang sangit', 'Ulat grayak']","['Insektisida', 'Dursban 480 EC', 'Insektisida']","['2-3 ml/l air', '2-3 ml/l air', '2-3 ml/l air']"
 Anggrek,"['Kutu kebul', 'Thrips']","['Mitac 250 EC', 'Curacron 500 EC']","['2 ml/l air', '2-3 ml/l air']"
-Cabai,Ulat buah,Akarisida,2 ml/l air
+Cabai,['Ulat buah'],['Dursban 480 EC'],['2 ml/l air']
