@@ -65,10 +65,16 @@ def rekap_penjualan():
     }).reset_index()
     
     rekap_per_hari.index = range(1, len(rekap_per_hari) + 1)
-    rekap_per_hari.to_csv('rekap_penjualan.csv', index_label="No.")
+    rekap_per_hari.to_csv('rekap_penjualan.csv')
     return rekap_per_hari
      
 # -----------------------------------------Fungsi untuk PAGE "TANAMAN"----------------------------------------------------------------
+
+# Fungsi untuk kembali ke dashboard tanaman
+def back_tanaman():
+    tanaman()
+    
+# Fungsi untuk entri informasi tanaman (Nama, Hama, Pestisida, Dosis)    
 def entri_info():
     clear()
 
@@ -129,8 +135,9 @@ def entri_info():
             dosis_list.extend(row['Dosis'].split(', '))
     print("-"*60)
     input("Data berhasil ditambahkan. Klik ENTER untuk kembali")
-    tanaman()
+    back_tanaman()
     
+# Fungsi untuk menampilkan informasi tanaman dari file csv ke terminal
 def tampilkan_info():
     clear()
     # Membaca data dari file CSV, dimulai dari baris ke-2
@@ -154,8 +161,8 @@ def tampilkan_info():
     print("-" * 60)
     print(df)
     print("=" * 60)
-    
-    
+     
+# Fungsi untuk mengupdate informasi tanaman yang tersimpan di dalam file csv       
 def update_info():
     clear()
     tampilkan_info()
@@ -177,8 +184,7 @@ def update_info():
             print(f"Tanaman dengan nama {nama} tidak ditemukan.")
             cancel = input("Ketik \'b\' untuk kembali ke dashboard! : ")
             if cancel.lower() == "b":
-                tanaman()
-            tanaman()
+                info_tanaman()
         # Menambahkan data hama, pestisida, dan dosis baru
         list_hama = []
         list_pestisida = []
@@ -216,50 +222,57 @@ def update_info():
         print(f"Info tanaman {nama} berhasil diupdate")
 
         input("Klik ENTER untuk kembali!")
-        tanaman()
+        back_tanaman()
 
-
+# Fungsi untuk menghapus informasi tanaman di dalam file csv
 def hapus_info():
     clear()
     tampilkan_info()
-    
-    # Membaca data info tanaman dari file csv
-    list_data = []
+    # Membaca data tanaman dari file csv
+    list_tanaman = []
     with open("info_tanaman.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        for row in reader:
-            list_data.append(row)
+        list_tanaman = [row for row in reader]
 
-    # Meminta nama tanaman yang akan dihapus
-    nama_tanaman_hapus = input("Masukkan nama tanaman yang akan dihapus: ")
+    while True:
+        nama = input("Masukkan nama tanaman untuk dihapus: ")
+        found = False
+        for data in list_tanaman:
+            if data['Nama'] == nama:
+                found = True
+                break
 
-    # Mencari dan menghapus tanaman yang sesuai
-    tanaman_terhapus = None
-    updated_list_data = []
-    for tanaman in list_data:
-        if tanaman['Nama'] == nama_tanaman_hapus:
-            tanaman_terhapus = tanaman
+        if not found:
+            print(f"Tanaman dengan nama {nama} tidak ditemukan.")
+            input("Klik ENTER untuk kembali ke dashboard!")
+            back_tanaman()
         else:
-            updated_list_data.append(tanaman)
+            confirm = input(f"Apakah Anda yakin ingin menghapus info tanaman {nama}? [y/n]: ")
+            if confirm.lower() == "y":
+                list_tanaman.remove(data)
 
-    # Menulis kembali data tanpa tanaman yang dihapus
-    with open("info_tanaman.csv", mode="w", newline="") as info_tanaman:
-        header = ['Nama', 'Hama', 'Pestisida', 'Dosis']
-        writer = csv.DictWriter(info_tanaman, fieldnames=header)
-        writer.writeheader()
-        writer.writerows(updated_list_data)
+                # Menuliskan kembali data tanaman setelah menghapus data yang dipilih
+                with open("info_tanaman.csv", mode="w", newline="") as info_tanaman:
+                    header = ['Nama', 'Hama', 'Pestisida', 'Dosis']
+                    writer = csv.DictWriter(info_tanaman, fieldnames=header)
+                    writer.writeheader()
+                    writer.writerows(list_tanaman)
 
-    print("-" * 60)
-    if tanaman_terhapus:
-        input(f"Info tanaman {tanaman_terhapus['Nama']} berhasil dihapus")
-        tampilkan_info()
-    else:
-        print(f"Tanaman dengan nama {nama_tanaman_hapus} tidak ditemukan.")
+                tampilkan_info()
+                print("-" * 60)
+                print(f"Info tanaman {nama} berhasil dihapus")
 
-    input("Klik ENTER untuk kembali ke menu tanaman!")
-    tanaman()
+                input("Klik ENTER untuk kembali!")
+                back_tanaman()
+
+            elif confirm.lower() == "n":
+                back_tanaman()
+            else:
+                print("Pilihan tidak valid. Silakan masukkan 'y' atau 'n'.")
+
  
 # -----------------------------------------Fungsi untuk PAGE "PESTISIDA"----------------------------------------------------------------
+# Fungsi untuk entri stok pestisida dan menyimpannya ke dalam file csv
 def entri_stok():
     clear()
     # Cek jika file belum ada akan dibuat secara otomatis
@@ -315,7 +328,8 @@ def entri_stok():
     tampilkan_stok()
     input("Klik ENTER untuk kembali!")
     pestisida()
-    
+
+# Fungsi untuk menampilkan stok pestisida dari file csv ke terminal 
 def tampilkan_stok():
     clear()
     df = pd.read_csv("data_pestisida.csv")
@@ -326,7 +340,8 @@ def tampilkan_stok():
     print("-"*68)
     print(df)
     print("="*68)
-    
+ 
+# Fungsi untuk mengupdate (mengubah) data pestisida
 def update_stok():
     clear()
     tampilkan_stok()
@@ -356,8 +371,8 @@ def update_stok():
                 writer.writeheader()
                 writer.writerows(list_pestisida)
             tampilkan_stok()
-            print("-"*60)
             print("Data pestisida berhasil diupdate!")
+            print("-"*68)
         else:
             input("Pilih data yang tersedia!. Klik ENTER untuk kembali!")
             update_stok()
@@ -368,6 +383,7 @@ def update_stok():
     input("Klik ENTER untuk kembali!")
     pestisida()
 
+# Fungsi untuk menghapus stok pestisida
 def hapus_stok():
     clear()
     tampilkan_stok()
@@ -411,6 +427,7 @@ def hapus_stok():
     input("\nKlik ENTER untuk kembali ke menu Pestisida!")
     pestisida()
 
+#------------------------------------------------- Fungsi untuk DASHBOARD ------------------------------------------------------------
 def tanaman():
     clear()
     print(f'''

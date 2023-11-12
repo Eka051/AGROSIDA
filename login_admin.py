@@ -106,7 +106,7 @@ def start():
     |{"A G R O S I D A".center(58)}|
     |{"Hama Hilang, Petani Aman".center(58)}|
     {'='*60}  
-    |{"Halaman Admin".center(58)}|
+    |{"Halaman Login Admin".center(58)}|
     |{"-"*58}|
     |{"[1]. Login Admin".ljust(58)}|
     |{"[2]. Ubah Password".ljust(58)}|
