@@ -1,6 +1,6 @@
 import os # Mengimpor modul os untuk berinteraksi dengan sistem operasi
 import csv # Mengimpor modul csv untuk membuat file csv
-
+current_username = None
 # # Fungsi untuk menampilkan header / judul program
 def heading():
     print("="*60)
@@ -58,25 +58,27 @@ def register():
 
 # Fungsi untuk login
 def login():
+    global current_username
     clear()
     heading()
     print("LOGIN".center(60))
-    print("-"*60)
+    print("-" * 60)
     username = input("Masukkan Username: ")
     password = input("Masukkan Password: ")
-    print("="*60)
+    print("=" * 60)
 
     # Membaca data dari file csv
-    data_account = [] # menyimpan data akun yang dibaca dari file csv
+    data_account = []  # menyimpan data akun yang dibaca dari file csv
     with open("data_user.csv", mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:
             data_account.append(row)
 
-    data_login = [] # menyimpan data akun yang sesuai dengan username dan password yang dimasukkan oleh user
+    data_login = []  # menyimpan data akun yang sesuai dengan username dan password yang dimasukkan oleh user
     for data in data_account:
         if username == data['username'] and password == data['password']:
             data_login.append(data)
+            current_username = username  # Menyimpan nama pengguna yang sedang login
             input("Login Berhasil. Klik \"ENTER\" Untuk Melanjutkan!")
             return
 
@@ -90,10 +92,11 @@ def login():
 
         for row in data_account:
             if row['username'] == username and row['password'] == password:
+                current_username = username  # Menyimpan nama pengguna yang sedang login
                 input("Login Berhasil. Klik ENTER Untuk Melanjutkan!")
                 return
 
-        print("-"*60)
+        print("-" * 60)
         print("Username atau Password Salah.")
         kesempatan += 1
 
@@ -122,5 +125,4 @@ def start():
     else:
         input("Pilihan INVALID. Pilih Opsi Yang Tersedia!")
         start()
-
 start()

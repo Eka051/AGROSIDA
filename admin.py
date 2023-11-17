@@ -35,38 +35,35 @@ def main_menu():
     elif option == "2":
         pestisida()
     elif option == "3":
-        clear()
-        print("="*60)
-        print("DATA REKAP PENJUALAN".center(60))
-        print("-"*60)
-        print(rekap_penjualan())
-        print("="*60)
-        input("Klik ENTER untuk kembali!")
-        main_menu()
+        rekap_penjualan()
     else:
         input("Pilihan INVALID. Masukkan dengan benar! Klik ENTER untuk kembali!")
         main_menu()
         
 def rekap_penjualan():
-    if not os.path.exists("transaksi.csv"):
-        print("="*60)
-        print("\nData rekap penjualan tidak ada. Klik ENTER untuk kembali!\n")
-        print("="*60)
-        input()
-        main_menu()
-        
-    data = pd.read_csv("transaksi.csv")
-    data['Tanggal'] = data['Tanggal Transaksi']
-    
-    # Merekap penjualan perhari
-    rekap_per_hari = data.groupby(['Tanggal']).agg({ #agregasi data frame untuk menghitung jumlah penjualan
-        'Jumlah Pembelian': 'sum',
-        'Total Harga': 'sum',
-    }).reset_index()
-    
-    rekap_per_hari.index = range(1, len(rekap_per_hari) + 1)
-    rekap_per_hari.to_csv('rekap_penjualan.csv')
-    return rekap_per_hari
+    clear()
+    # Membaca data transaksi dari file CSV
+    df = pd.read_csv('data_transaksi.csv')
+
+    # Menambahkan kolom No sebagai nomor urut
+    df['No'] = range(1, len(df) + 1)
+
+    # Mengelompokkan data berdasarkan 'Tanggal Transaksi', 'Username', dan 'Nama Produk'
+    grup_df = df.groupby(['Tanggal Transaksi', 'Username', 'Nama Produk'], as_index=False)
+
+    # Menghitung jumlah pembelian dan total harga
+    grup_df = grup_df[['Jumlah Pembelian', 'Total Harga']].sum()
+
+    # Menambahkan kolom No sebagai nomor urut setelah pengelompokkan
+    grup_df['No'] = range(1, len(grup_df) + 1)
+
+    print("="*90)
+    print("DATA REKAP PENJUALAN PER HARI".center(90))
+    print("-"*90)
+    print(grup_df[['No', 'Tanggal Transaksi', 'Username', 'Nama Produk', 'Jumlah Pembelian', 'Total Harga']].to_string(index=False))
+    print("="*90)
+    input("Klik ENTER untuk kembali!")
+    main_menu()
      
 # -----------------------------------------Fungsi untuk PAGE "TANAMAN"----------------------------------------------------------------
 
@@ -333,10 +330,9 @@ def entri_stok():
 def tampilkan_stok():
     clear()
     df = pd.read_csv("data_pestisida.csv")
-    df['Terjual'] = df['Terjual'].astype('int')
     df.index = range(1, len(df) + 1)
     print("="*68)
-    print("DATA STOK PESTISIDA".center(68))
+    print("PRODUK PESTISIDA".center(68))
     print("-"*68)
     print(df)
     print("="*68)

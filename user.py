@@ -2,6 +2,7 @@ import os
 import csv
 import login_user
 import pandas as pd
+from login_user import current_username
 
 def clear():
     os.system('cls')
@@ -46,16 +47,14 @@ def info_tanaman():
 
 def beli_pestisida():
     clear()
-    clear()
     df = pd.read_csv("data_pestisida.csv")
-    df['Terjual'] = df['Terjual'].astype('int')
     df.index = range(1, len(df) + 1)
-    print("="*68)
+    print("=" * 68)
     print("PRODUK PESTISIDA".center(68))
-    print("-"*68)
+    print("-" * 68)
     print(df)
-    print("="*68)
-    
+    print("=" * 68)
+
     option = input("Pilih nomor untuk membeli produk: ")
 
     if option.isdigit() and 1 <= int(option) <= len(df):
@@ -66,14 +65,12 @@ def beli_pestisida():
         if jumlah_pembelian <= selected_product['Jumlah']:
             # Update Jumlah pestisida di file csv
             df.at[selected_index, 'Jumlah'] -= jumlah_pembelian
-            df.to_csv("data_pestisida.csv", index=False)
-            
-            # Menambah data pestisida yang terjual ke dalam csv
             df.at[selected_index, 'Terjual'] += jumlah_pembelian
             df.to_csv("data_pestisida.csv", index=False)
 
-            # Menyimpan data transaksi ke file csv
+            # Menyimpan data transaksi ke file csv dengan mencatat nama pengguna (username) yang sedang login
             transaksi_df = pd.DataFrame({
+                'Username': [current_username],
                 'Nama Produk': [selected_product['Nama']],
                 'Jumlah Pembelian': [jumlah_pembelian],
                 'Total Harga': [jumlah_pembelian * selected_product['Harga (Rp)']],
@@ -81,18 +78,18 @@ def beli_pestisida():
             })
 
             # Menambahkan data transaksi ke dalam file transaksi.csv
-            transaksi_df.to_csv("transaksi.csv", mode='a', header=not os.path.exists("transaksi.csv"), index=False)
-                    
+            transaksi_df.to_csv("data_transaksi.csv", mode='a', header=not os.path.exists("data_transaksi.csv"), index=False)
+
             # Untuk mencetak struk dari pembelian user
             save_receipt(selected_product, jumlah_pembelian)
-            
+
             input("Transaksi berhasil. Klik ENTER untuk kembali!")
             main_menu()
         else:
-            input("Stok tidak mencukupi. Silakan coba lagi dengan jumlah yang lebih kecil.")
+            input("Stok tidak mencukupi. Silahkan coba lagi dengan jumlah yang lebih kecil.")
             beli_pestisida()
     else:
-        input("Pilihan tidak valid. Silakan pilih nomor yang sesuai.")
+        input("Pilihan tidak valid. Silahkan pilih nomor yang sesuai.")
         beli_pestisida()
 
 def save_receipt(selected_product, jumlah_pembelian):
