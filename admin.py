@@ -26,6 +26,7 @@ def main_menu():
     |{"[1]. Dashboard Tanaman".ljust(58)}|
     |{"[2]. Dashboard Pestisida".ljust(58)}|
     |{"[3]. Rekap Penjualan".ljust(58)}|
+    |{"[4]. Exit".ljust(58)}|
     {'='*60}
     ''')
     
@@ -36,6 +37,8 @@ def main_menu():
         pestisida()
     elif option == "3":
         rekap_penjualan()
+    elif option == "4":
+        exit()
     else:
         input("Pilihan INVALID. Masukkan dengan benar! Klik ENTER untuk kembali!")
         main_menu()
