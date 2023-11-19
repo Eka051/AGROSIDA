@@ -62,9 +62,9 @@ def beli_pestisida():
         selected_product = df.loc[selected_index]
         jumlah_pembelian = int(input(f"Masukkan jumlah pembelian {selected_product['Nama']}: "))
 
-        if jumlah_pembelian <= selected_product['Jumlah']:
+        if jumlah_pembelian <= selected_product['Stok']:
             # Update Jumlah pestisida di file csv
-            df.at[selected_index, 'Jumlah'] -= jumlah_pembelian
+            df.at[selected_index, 'Stok'] -= jumlah_pembelian
             df.at[selected_index, 'Terjual'] += jumlah_pembelian
             df.to_csv("data_pestisida.csv", index=False)
 
