@@ -48,111 +48,41 @@
 # # Menggunakan fungsi untuk mencetak beberapa nilai deret eksponensial
 # for i in range(0, 5):
 #     print(f'a{i} = {deret_eksponensial(i)}')
-import os
-import csv
-
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def is_positive_integer(value):
-    return value.isdigit() and int(value) >= 0
-
-def entri_stok():
+def register():
     clear()
+    heading()
+    print("REGISTER".center(60))
+    print("-" * 60)
 
-    # Cek jika file belum ada akan dibuat secara otomatis
-    file_path = "data_pestisida.csv"
-    if not os.path.exists(file_path):
-        with open(file_path, mode="a", newline="") as data_pestisida:
-            header = ['Nama', 'Stok', 'Ukuran', 'Harga (Rp)', 'Terjual']
-            writer = csv.DictWriter(data_pestisida, fieldnames=header)
-            writer.writeheader()
-
-    # Membaca nama pestisida yang sudah ada
-    list_pestisida = set()
-    with open(file_path, mode="r") as file:
+    data_account = []
+    # Membaca data user dari file csv
+    with open("data_user.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        list_pestisida.update(row['Nama'].title() for row in reader)
-
-    # Membuka file CSV untuk menambahkan data
-    with open(file_path, mode="a", newline="") as data_pestisida:
-        header = ['Nama', 'Stok', 'Ukuran', 'Harga (Rp)', 'Terjual']
-        writer = csv.DictWriter(data_pestisida, fieldnames=header)
-
-        print("=" * 60)
-        print("ENTRI STOK PESTISIDA".center(60))
-        print("-" * 60)
-
-        counter = True
-        while counter:
-            nama = input("Masukkan nama pestisida: ").strip().title()
-
-            # Memeriksa apakah nama pestisida sudah ada atau kosong
-            if not nama:
-                print("Inputan tidak boleh kosong. Masukkan data kembali!")
-                continue
-            if nama in list_pestisida:
-                print(f"Data pestisida {nama} sudah ada. Masukkan data lain!")
-                continue
-
-            stok = input("Masukkan stok pestisida: ")
-            if not is_positive_integer(stok):
-                print("Stok harus berupa angka non-negatif. Tambahkan data lain.")
-                continue
-            stok = int(stok)
-
-            ukuran = input("Masukkan ukuran: ")
-            if not ukuran:
-                print("Ukuran tidak boleh kosong. Tambahkan data lain.")
-                continue
-
-            harga = input("Masukkan Harga (Rp): ")
-            if not is_positive_integer(harga):
-                print("Harga harus berupa angka non-negatif. Tambahkan data lain.")
-                continue
-            harga = int(harga)
-
-            print("=" * 60)
-
-            # Menulis data baru ke file CSV
-            writer.writerow({'Nama': nama, 'Stok': stok, 'Ukuran': ukuran, 'Harga (Rp)': harga, 'Terjual': 0})
-            print("Data berhasil disimpan!")
-            print("-" * 60)
-
-            while True:
-                option = input("Tambah stok pestisida lagi? [y/n] : ").lower()
-                if option == "y" or option == "n":
-                    break
-                else:
-                    print("Masukkan pilihan yang benar!")
-
-            if option == "n":
-                counter = False
-                print("-" * 60)
-                print("Data berhasil disimpan!")
-
-    # Menampilkan stok setelah entri
-    tampilkan_stok()
-    input("Klik ENTER untuk kembali!")
-    pestisida()
-
-def tampilkan_stok():
-    # Fungsi untuk menampilkan stok pestisida
-    with open("data_pestisida.csv", mode="r") as file:
-        reader = csv.DictReader(file)
-        print("=" * 60)
-        print("STOK PESTISIDA".center(60))
-        print("-" * 60)
-        print(f"| {'Nama':<20} | {'Stok':<10} | {'Ukuran':<10} | {'Harga (Rp)':<15} | {'Terjual':<10} |")
-        print("-" * 60)
         for row in reader:
-            print(f"| {row['Nama']:<20} | {row['Stok']:<10} | {row['Ukuran']:<10} | {row['Harga (Rp)']:<15} | {row['Terjual']:<10} |")
-        print("-" * 60)
+            data_account.append(row)
 
-# Fungsi ini hanya sebagai contoh. Sesuaikan dengan kebutuhan Anda.
-def pestisida():
-    print("Menu Pestisida")
-    # ... (tambahkan pilihan menu Pestisida sesuai kebutuhan Anda)
+    while True:
+        username = input("Masukkan Username: ")
+        if username.strip() and username != "0" and len(username) >= 3:
+            # Mengecek jika inputan user sama dengan username yang telah terdaftar
+            user_ready = False
+            for account in data_account:
+                if username == account['username']:
+                    input("Username telah terdaftar. Masukkan username lain!")
+                    user_ready = True
+                    break
 
-# Pemanggilan fungsi entri_stok()
-entri_stok()
+            if not user_ready:
+                break
+        else:
+            print("Username tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
+
+    while True:
+        password = input("Masukkan Password: ")
+        if password.strip() and password != "0" and len(password) >= 3:
+            break
+        else:
+            print("Password tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
+
+    print("=" * 60)
+    # Lanjutan kode untuk menyimpan data ke file atau tindakan selanjutnya

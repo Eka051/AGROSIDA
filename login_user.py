@@ -26,23 +26,28 @@ def register():
         for row in reader:
             data_account.append(row)
             
-    username = input("Masukkan Username: ")
-    while not username.strip() or username == "0":
-        print("Username tidak boleh kosong atau 0!")
+    while True:
         username = input("Masukkan Username: ")
-        
-    # Mengecek jika inputan user sama dengan username yang telah terdaftar
-    user_ready = False
-    for account in data_account:
-        if username == account['username']:
-            input("Username telah terdaftar. Masukkan username lain!")
-            user_ready = True
-            register()
+        if username.strip() and username != "0" and len(username) >= 3:
+            # Mengecek jika inputan user sama dengan username yang telah terdaftar
+            user_ready = False
+            for account in data_account:
+                if username == account['username']:
+                    input("Username telah terdaftar. Masukkan username lain!")
+                    user_ready = True
+                    break
 
-    password = input("Masukkan Password: ")
-    while not password.strip() or password == "0":
-        print("Password tidak boleh kosong atau nol!")
+            if not user_ready:
+                break
+        else:
+            print("Username tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
+
+    while True:
         password = input("Masukkan Password: ")
+        if password.strip() and password != "0" and len(password) >= 3:
+            break
+        else:
+            print("Password tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
     print("="*60)
     
     # Mengecek keberadaan file CSV, dan membuatnya jika belum ada

@@ -457,11 +457,15 @@ def update_stok():
                     print("Stok berupa angka dan tidak boleh 0. Masukkan data kembali!")
             while True:
                 ukuran = input("Masukkan ukuran baru: ")
-                if ukuran.strip() and ukuran != 0:
-                    data['Ukuran'] = str(ukuran)
-                    break
+                if ukuran.strip():
+                    if ukuran != "0":
+                        data['Ukuran'] = str(ukuran)
+                        break
+                    else:
+                        print("Ukuran tidak boleh 0!")
                 else:
-                    print("Ukuran tidak boleh kosong dan 0. Masukkan data kembali!")
+                    print("Ukuran tidak boleh kosong. Masukkan data kembali!")
+
             while True:
                 harga = input("Masukkan Harga baru (Rp): ")
                 if harga.isdigit():
