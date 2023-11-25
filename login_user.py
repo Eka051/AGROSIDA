@@ -18,14 +18,30 @@ def register():
     heading()
     print("REGISTER".center(60))
     print("-"*60)
+    
+    data_account = []
+    # Membaca data user dari file csv
+    with open("data_user.csv", mode="r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            data_account.append(row)
+            
     username = input("Masukkan Username: ")
-    while not username.strip():
-        print("Username tidak boleh kosong!")
+    while not username.strip() or username == "0":
+        print("Username tidak boleh kosong atau 0!")
         username = input("Masukkan Username: ")
+        
+    # Mengecek jika inputan user sama dengan username yang telah terdaftar
+    user_ready = False
+    for account in data_account:
+        if username == account['username']:
+            input("Username telah terdaftar. Masukkan username lain!")
+            user_ready = True
+            register()
 
     password = input("Masukkan Password: ")
-    while not password.strip():
-        print("Password tidak boleh kosong!")
+    while not password.strip() or password == "0":
+        print("Password tidak boleh kosong atau nol!")
         password = input("Masukkan Password: ")
     print("="*60)
     
@@ -35,21 +51,6 @@ def register():
             header = ['username', 'password']
             writer = csv.DictWriter(file, fieldnames=header)
             writer.writeheader()
-
-    data_account = []
-    # Membaca data user dari file csv
-    with open("data_user.csv", mode="r") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            data_account.append(row)
-            
-    # Mengecek jika inputan user sama dengan username yang telah terdaftar
-    user_ready = False
-    for account in data_account:
-        if username == account['username']:
-            input("Username telah terdaftar. Masukkan username lain!")
-            user_ready = True
-            register()
             
     # Jika akun user belum terdaftar, maka akan menambahkan datanya ke dalam file csv
     if user_ready == False :

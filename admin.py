@@ -86,7 +86,7 @@ def entri_info():
     list_tanaman = []
     with open("info_tanaman.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        list_tanaman.extend(row['Nama'] for row in reader) # Untuk mengenali title case data info tanaman yang sama
+        list_tanaman.extend(row['Nama'] for row in reader) # Untuk mengenali data info tanaman yang sama menggunakan title case
 
     print("=" * 60)
     print("ENTRI INFO TANAMAN".center(60))
@@ -95,7 +95,7 @@ def entri_info():
     counter = True
     while counter:
         nama = input("Masukkan nama tanaman: ").strip().title()
-        if not nama and nama.isalpha():
+        if not nama or not nama.isalpha():
             print("Inputan nama tanaman tidak boleh kosong dan harus berupa huruf! Masukkan kembali!")
             continue
         if nama in list_tanaman:
@@ -108,43 +108,31 @@ def entri_info():
 
         while True:
             hama = input(f"Masukkan hama {nama} : ").strip()
-            if not hama:
+            if not hama or hama == "0":
                 print("Inputan tidak boleh kosong! Masukkan data kembali!")
                 continue
+            break
+        while True:
             pestisida = input(f"Masukkan pestisida untuk {hama} : ").strip()
-            if not pestisida:
+            if not pestisida or pestisida == "0":
                 print("Inputan tidak boleh kosong! Masukkan data kembali!")
                 continue
+            break
+        while True:
             dosis = input(f"Masukkan dosis untuk {pestisida} : ").strip()
-            if not dosis:
-                print("Inputan tidak boleh kosong! Masukkan data kembali!")
+            if not dosis or dosis == "0":
+                print("Inputan tidak boleh kosong atau 0! Masukkan data kembali!")
                 continue
+            break
 
             # Menambahkan hasil inputan ke dalam list
-            list_hama.append(hama)
-            list_pestisida.append(pestisida)
-            list_dosis.append(dosis)
-
-            print("-" * 60)
-            while True:
-                option = input("Tambah hama, pestisida, dan dosis lagi? [y/n] : ").strip()
-
-                if option.lower() == "y" or option.lower() == "n":
-                    break
-                else:
-                    print("Masukkan pilihan yang benar!")
-
-            if option.lower() == "n":
-                break
-
-        data = {'Nama': nama, 'Hama': list_hama, 'Pestisida': list_pestisida, 'Dosis': list_dosis}
-        with open("info_tanaman.csv", mode="a", newline="") as info_tanaman:
-            writer = csv.DictWriter(info_tanaman, fieldnames=header)
-            writer.writerow(data)
+        list_hama.append(hama)
+        list_pestisida.append(pestisida)
+        list_dosis.append(dosis)
 
         print("-" * 60)
         while True:
-            option = input("Tambah data tanaman lagi? [y/n] : ").strip()
+            option = input("Tambah hama, pestisida, dan dosis lagi? [y/n] : ").strip()
 
             if option.lower() == "y" or option.lower() == "n":
                 break
@@ -152,7 +140,23 @@ def entri_info():
                 print("Masukkan pilihan yang benar!")
 
         if option.lower() == "n":
-            counter = False
+            break
+
+    data = {'Nama': nama, 'Hama': list_hama, 'Pestisida': list_pestisida, 'Dosis': list_dosis}
+    with open("info_tanaman.csv", mode="a", newline="") as info_tanaman:
+        writer = csv.DictWriter(info_tanaman, fieldnames=header)
+        writer.writerow(data)
+
+    print("-" * 60)
+    while True:
+        option = input("Tambah data tanaman lagi? [y/n] : ").strip()
+        if option.lower() == "y" or option.lower() == "n":
+            break
+        else:
+            print("Masukkan pilihan yang benar!")
+
+    if option.lower() == "n":
+        counter = False
 
     hama_list = []
     pestisida_list = []
@@ -331,7 +335,7 @@ def entri_stok():
     clear()
     # Cek jika file belum ada akan dibuat secara otomatis
     if not os.path.exists("data_pestisida.csv"):
-        with open("data_pestisida55.csv", mode="a", newline="") as data_pestisida:
+        with open("data_pestisida.csv", mode="a", newline="") as data_pestisida:
             header = ['Nama', 'Stok', 'Ukuran', 'Harga (Rp)', 'Terjual']
             writer = csv.DictWriter(data_pestisida, fieldnames=header)
             writer.writeheader()
@@ -339,7 +343,7 @@ def entri_stok():
     list_pestisida = []
     with open("data_pestisida.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        list_pestisida.append(row['Nama'].title() for row in reader)
+        list_pestisida = [row['Nama'].title() for row in reader] # Untuk mengenali data stok pestisida yang sama menggunakan title case
 
     # Membuka file CSV untuk menambahkan data
     with open("data_pestisida.csv", mode="a", newline="") as data_pestisida:
@@ -355,31 +359,35 @@ def entri_stok():
 
             # Memeriksa apakah nama pestisida sudah ada atau kosong
             if not nama:
-                print("Inputan tidak boleh kosong. Masukkan data kembali!")
+                print("Inputan tidak boleh kosong. Masukkan data kembali!\n")
                 continue
             if nama in list_pestisida:
-                print(f"Data pestisida {nama} sudah ada. Masukkan data lain!")
+                print(f"Data pestisida {nama} sudah ada. Masukkan data lain!\n")
                 continue
-                    
-            stok = input("Masukkan stok pestisida: ")
-            if not stok.isdigit():
-                print("Stok harus berupa angka. Tambahkan data lain.")
-                input("Klik ENTER untuk kembali!")
-                entri_stok()
-            stok = int(stok)
-
-            ukuran = input("Masukkan ukuran: ")
-            if not ukuran:
-                print("Ukuran tidak boleh kosong. Tambahkan data lain.")
-                input("Klik ENTER untuk kembali!")
-                entri_stok()
-
-            harga = input("Masukkan Harga (Rp): ")
-            if not harga.isdigit():
-                print("Harga harus berupa angka. Tambahkan data lain.")
-                input("Klik ENTER untuk kembali!")
-                entri_stok()
-            harga = int(harga)
+            while True:    
+                stok = input("Masukkan stok pestisida: ").strip()
+                if not stok.isdigit():
+                    print("Stok harus berupa angka. Tambahkan data lain.\n")
+                    continue
+                stok = int(stok)
+                if stok > 0:
+                    break
+                else:
+                    print("Stok tidak boleh 0. Masukkan data lagi!\n")
+            while True: 
+                ukuran = input("Masukkan ukuran: ").strip()
+                if not ukuran:
+                    print("Ukuran tidak boleh kosong. Tambahkan data lain.")
+                    continue
+                break
+                
+            while True:
+                harga = input("Masukkan Harga (Rp): ").strip()
+                if not harga.isdigit():
+                    print("Harga harus berupa angka. Tambahkan data lain.")
+                    continue
+                harga = int(harga)
+                break
 
             print("="*60)
             
@@ -387,14 +395,18 @@ def entri_stok():
             writer.writerow({'Nama': nama, 'Stok': stok, 'Ukuran': ukuran, 'Harga (Rp)': harga, 'Terjual': 0})
             print("Data berhasil disimpan!")
             print("-" * 60)
+            
             option = input("Tambah stok pestisida lagi? [y/n] : ")
-
-            if option.lower() == "y":
-                counter = True
-            else:
-                counter = False
-                print("-"*60)
-                print("Data berhasil disimpan!")
+            while True:
+                if option.lower() == "y":
+                    counter = True
+                elif option.lower() == "n":
+                    counter = False
+                    break
+                else:
+                    print("Masukkan pilihan yang benar!")
+        print("-"*60)
+        print("Data berhasil disimpan!")
     
     tampilkan_stok()
     input("Klik ENTER untuk kembali!")
@@ -436,25 +448,32 @@ def update_stok():
         if 1 <= no_produk <= len(list_pestisida):
             data = list_pestisida[no_produk - 1]
 
-            stok = input("Masukkan stok pestisida baru: ")
-            ukuran = input("Masukkan ukuran baru: ")
-            harga = input("Masukkan Harga baru (Rp): ")
-
-            # Memeriksa apakah stok adalah angka
-            if stok.strip() and stok.isdigit():
-                data['Stok'] = str(stok)
-            else:
-                print("Stok harus diisi dengan angka. Data tidak terupdate.")
-                input("Klik ENTER untuk kembali!")
-                update_stok()
-                return
-
-            # Memeriksa apakah ada input atau tidak, jika tidak maka data tidak akan diupdate
-            if ukuran.strip():
-                data['Ukuran'] = str(ukuran)
-            if harga.strip():
-                data['Harga (Rp)'] = str(harga)
-
+            while True:
+                stok = input("Masukkan stok pestisida baru: ")
+                if stok.strip() and stok.isdigit() and stok != 0:
+                    data['Stok'] = int(stok)
+                    break
+                else:
+                    print("Stok berupa angka dan tidak boleh 0. Masukkan data kembali!")
+            while True:
+                ukuran = input("Masukkan ukuran baru: ")
+                if ukuran.strip() and ukuran != 0:
+                    data['Ukuran'] = str(ukuran)
+                    break
+                else:
+                    print("Ukuran tidak boleh kosong dan 0. Masukkan data kembali!")
+            while True:
+                harga = input("Masukkan Harga baru (Rp): ")
+                if harga.isdigit():
+                    harga = int(harga)
+                    if harga > 0:
+                        data['Harga (Rp)'] = int(harga)
+                        break
+                    else:
+                        print("Harga harus lebih besar dari 0. Masukkan data kembali!")
+                else:
+                    print("Masukkan angka yang valid. Masukkan data kembali!")
+                
             with open("data_pestisida.csv", mode="w", newline="") as data_pestisida:
                 header = ['Nama', 'Stok', 'Ukuran', 'Harga (Rp)', 'Terjual']
                 writer = csv.DictWriter(data_pestisida, fieldnames=header)

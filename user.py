@@ -60,8 +60,22 @@ def beli_pestisida():
     if option.isdigit() and 1 <= int(option) <= len(df):
         selected_index = int(option)
         selected_product = df.loc[selected_index]
-        jumlah_pembelian = int(input(f"Masukkan jumlah pembelian {selected_product['Nama']}: "))
+        while True:
+            jumlah_pembelian = input(f"Masukkan jumlah pembelian {selected_product['Nama']}: ").strip()
+            
+            if not jumlah_pembelian:
+                print("Jumlah pembelian tidak boleh kosong!")
+            elif not jumlah_pembelian.isdigit():
+                print("Masukkan jumlah pembelian yang valid (angka bulat).")
+            else:
+                jumlah_pembelian = int(jumlah_pembelian)
 
+                if jumlah_pembelian == 0:
+                    print("Jumlah pembelian tidak boleh 0!")
+                else:
+                    break
+
+    
         if jumlah_pembelian <= selected_product['Stok']:
             # Update Jumlah pestisida di file csv
             df.at[selected_index, 'Stok'] -= jumlah_pembelian

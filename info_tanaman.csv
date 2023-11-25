@@ -1,3 +1,9 @@
 Nama,Hama,Pestisida,Dosis
 Padi,"['Wereng', 'Wereng hijau']","['Insektisida', 'lambdasihalotrin']","['2-3 ml/l air', '25 ml/l air']"
 Jagung,"['Belalang daun', 'Walang sangit', 'Ulat grayak']","['Insektisida', 'Dursban 480 EC', 'Insektisida']","['2-3 ml/l air', '2-3 ml/l air', '2-3 ml/l air']"
+Cabai,"['manyang', 'Ulat']","['Agresor', 'pest1']","['0', '10']"
+Anggrek,['kutu putih'],['Dursban 500'],['100 ml/l air']
+Mangga,['ulat bulu'],['Agresor'],['50 ml/l air']
+Eka,['eka'],['eka'],['eka']
+Pepaya,['mimik'],['pest'],['0']
+Rambutan,['semut'],['obat'],['0']
