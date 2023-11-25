@@ -1,7 +1,6 @@
 import os
 import csv
 import pandas as pd
-import getpass
 
 def clear():
     os.system('cls')
@@ -18,7 +17,14 @@ def login():
     print("LOGIN ADMIN".center(60))
     print("-"*60)
     username = input("Masukkan Username: ")
+    while not username.strip():
+        print("Username tidak boleh kosong!")
+        username = input("Masukkan Username: ")
+
     password = input("Masukkan Password: ")
+    while not password.strip():
+        print("Password tidak boleh kosong!")
+        password = input("Masukkan Password: ")
     print("="*60)
 
     # Membaca data dari file csv

@@ -1,6 +1,6 @@
 import os # Mengimpor modul os untuk berinteraksi dengan sistem operasi
 import csv # Mengimpor modul csv untuk membuat file csv
-current_username = None
+current_username = None # digunakan untuk menyimpan nama pengguna dari pengguna yang saat ini login.
 # # Fungsi untuk menampilkan header / judul program
 def heading():
     print("="*60)
@@ -19,7 +19,14 @@ def register():
     print("REGISTER".center(60))
     print("-"*60)
     username = input("Masukkan Username: ")
+    while not username.strip():
+        print("Username tidak boleh kosong!")
+        username = input("Masukkan Username: ")
+
     password = input("Masukkan Password: ")
+    while not password.strip():
+        print("Password tidak boleh kosong!")
+        password = input("Masukkan Password: ")
     print("="*60)
     
     # Mengecek keberadaan file CSV, dan membuatnya jika belum ada
@@ -58,13 +65,20 @@ def register():
 
 # Fungsi untuk login
 def login():
-    global current_username
+    global current_username # mendeklarasikan variabel 'current_username' menjadi global agar dapat diakses dari luar fungsi
     clear()
     heading()
     print("LOGIN".center(60))
     print("-" * 60)
     username = input("Masukkan Username: ")
+    while not username.strip():  # Validasi untuk memastikan pengguna memasukkan sesuatu
+        print("Username tidak boleh kosong!")
+        username = input("Masukkan Username: ")
+
     password = input("Masukkan Password: ")
+    while not password.strip():  # Validasi untuk memastikan pengguna memasukkan sesuatu
+        print("Password tidak boleh kosong!")
+        password = input("Masukkan Password: ")
     print("=" * 60)
 
     # Membaca data dari file csv
