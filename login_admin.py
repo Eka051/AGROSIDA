@@ -116,6 +116,7 @@ def start():
     |{"-"*58}|
     |{"[1]. Login Admin".ljust(58)}|
     |{"[2]. Ubah Password".ljust(58)}|
+    |{"[3]. Back".ljust(58)}|
     {'='*60}
     ''')
     
@@ -124,6 +125,9 @@ def start():
         login()
     elif option == "2":
         ubah_password()
+    elif option == "3":
+        import agrosida
+        agrosida.tampilan_utama()
     else:
         input("Pilihan INVALID. Klik ENTER untuk kembali")
         start()

@@ -1,9 +1,10 @@
-# import pandas as pd
-# import os
+import pandas as pd
+import os
+import csv
 # # from login_user import current_username
 
-# def clear():
-#     os.system('cls')
+def clear():
+    os.system('cls')
 
 # def rekap_penjualan():
 #     clear()
@@ -48,41 +49,79 @@
 # # Menggunakan fungsi untuk mencetak beberapa nilai deret eksponensial
 # for i in range(0, 5):
 #     print(f'a{i} = {deret_eksponensial(i)}')
-def register():
+def entri_info():
     clear()
-    heading()
-    print("REGISTER".center(60))
-    print("-" * 60)
 
-    data_account = []
-    # Membaca data user dari file csv
-    with open("data_user.csv", mode="r") as file:
+    # Mengecek file csv, jika belum ada akan dibuat secara otomatis
+    header = ['Nama', 'Hama', 'Pestisida', 'Dosis']
+    if not os.path.exists("info_tanaman.csv"):
+        with open("TANAMAN.csv", mode="a", newline="") as info_tanaman:
+            writer = csv.DictWriter(info_tanaman, fieldnames=header)
+            writer.writeheader()
+
+    # Membaca data tanaman yang sudah ada
+    list_tanaman = []
+    with open("info_tanaman.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        for row in reader:
-            data_account.append(row)
-
-    while True:
-        username = input("Masukkan Username: ")
-        if username.strip() and username != "0" and len(username) >= 3:
-            # Mengecek jika inputan user sama dengan username yang telah terdaftar
-            user_ready = False
-            for account in data_account:
-                if username == account['username']:
-                    input("Username telah terdaftar. Masukkan username lain!")
-                    user_ready = True
-                    break
-
-            if not user_ready:
-                break
-        else:
-            print("Username tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
-
-    while True:
-        password = input("Masukkan Password: ")
-        if password.strip() and password != "0" and len(password) >= 3:
-            break
-        else:
-            print("Password tidak boleh kosong, 0, dan panjang harus lebih dari atau sama dengan 3!")
+        list_tanaman.extend(row['Nama'] for row in reader) # Untuk mengenali data info tanaman yang sama menggunakan title case
 
     print("=" * 60)
-    # Lanjutan kode untuk menyimpan data ke file atau tindakan selanjutnya
+    print("ENTRI INFO TANAMAN".center(60))
+    print("-" * 60)
+
+    counter = True
+    while counter:
+        nama = input("Masukkan nama tanaman: ").strip().title()
+        if not nama or not nama.isalpha():
+            print("Inputan nama tanaman tidak boleh kosong dan harus berupa huruf! Masukkan kembali!")
+            continue
+        if nama in list_tanaman:
+            print(f"Data tanaman {nama} sudah ada! Masukkan data lain!")
+            continue
+
+        list_hama = []
+        list_pestisida = []
+        list_dosis = []
+
+        while True:
+            hama = input(f"Masukkan hama {nama} : ").strip()
+            if not hama or hama == "0":
+                print("Inputan tidak boleh kosong! Masukkan data kembali!")
+                continue
+            if not hama or not hama.isalpha():
+                print("Inputan hama tanaman tidak boleh kosong dan harus berupa huruf! Masukkan kembali!")
+                continue
+            break
+        while True:
+            pestisida = input(f"Masukkan pestisida untuk {hama} : ").strip()
+            if not pestisida or pestisida == "0":
+                print("Inputan tidak boleh kosong! Masukkan data kembali!")
+                continue
+            if not pestisida == "~!@#$%^&*()_+=-`<:<>?,./;":
+                print("Inputan tidak boleh simbol atau kosong harus huruf atau angka")
+                continue
+            break
+        while True:
+            dosis = input(f"Masukkan dosis untuk {pestisida} : ").strip()
+            if not dosis or dosis == "0":
+                print("Inputan tidak boleh kosong atau 0! Masukkan data kembali!")
+                continue
+            break
+
+            # Menambahkan hasil inputan ke dalam list
+        list_hama.append(hama)
+        list_pestisida.append(pestisida)
+        list_dosis.append(dosis)
+
+        print("-" * 60)
+        while True:
+            option = input("Tambah hama, pestisida, dan dosis lagi? [y/n] : ").strip()
+
+            if option.lower() == "y" or option.lower() == "n":
+                break
+            else:
+                print("Masukkan pilihan yang benar!")
+
+        if option.lower() == "n":
+            break
+entri_info()

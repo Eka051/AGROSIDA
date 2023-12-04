@@ -1,7 +1,7 @@
 import os
 import csv
-import login_user
 import pandas as pd
+import login_user
 from login_user import current_username
 
 def clear():

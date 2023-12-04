@@ -1,7 +1,7 @@
 import os # Mengimpor modul os untuk berinteraksi dengan sistem operasi
 import csv # Mengimpor modul csv untuk membuat file csv
 current_username = None # digunakan untuk menyimpan nama pengguna dari pengguna yang saat ini login.
-# # Fungsi untuk menampilkan header / judul program
+# Fungsi untuk menampilkan header / judul program
 def heading():
     print("="*60)
     print("A G R O S I D A".center(60))
@@ -135,6 +135,7 @@ def start():
     |{"-"*58}|
     |{"[1]. Login".ljust(58)}|
     |{"[2]. Register".ljust(58)}|
+    |{"[3]. Back".ljust(58)}|
     {'='*60}
     ''')
     option = input("Masukkan Pilihan: ")
@@ -142,6 +143,9 @@ def start():
         login()
     elif option == "2":
         register()
+    elif option == "3":
+        import agrosida
+        agrosida.tampilan_utama()
     else:
         input("Pilihan INVALID. Pilih Opsi Yang Tersedia!")
         start()
